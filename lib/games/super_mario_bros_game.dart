@@ -1,11 +1,13 @@
 import 'dart:async';
 
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:supermario_flutter/levels/level_component.dart';
 import 'package:supermario_flutter/levels/level_option.dart';
 
-class SuperMarioBrosGame extends FlameGame {
+class SuperMarioBrosGame extends FlameGame
+    with HasCollisionDetection, HasKeyboardHandlerComponents {
   late CameraComponent cameraComponent;
   final World world = World(); //contenitore di TUTTI gli oggetti
   LevelComponent? _currentLevel;
