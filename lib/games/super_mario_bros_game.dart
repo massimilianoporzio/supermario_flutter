@@ -20,6 +20,7 @@ class SuperMarioBrosGame extends FlameGame {
           ..viewport.position = Vector2(
               500, 0) //posiz della TELECAMERA (50 px + in là dell'inizio)
         ;
+
     addAll([world, cameraComponent]); //agg il tutto al GAME
     loadLevel(LevelOption.lv_1_1);
     return super.onLoad();

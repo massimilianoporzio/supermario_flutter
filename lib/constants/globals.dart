@@ -18,11 +18,12 @@ class Globals {
   static const double tileSize = 16;
 
   /// Levels
-  static const lv_1_1 = 'world_1_1_map.tmx';
+  static const lv_1_1 = 'World_1_1_map.tmx';
 
   /// Sprite Sheets
   static const String blocksSpriteSheet = 'blocks_spritesheet.png';
   static const String goombaSpriteSheet = 'goomba_spritesheet.png';
+  static const String marioSpriteSheet = 'mario/smb_mario_sheet.png';
 
   /// Images
   static const String marioIdle = 'mario_idle.gif';
