@@ -6,6 +6,7 @@ import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flutter/src/services/keyboard_key.g.dart';
 import 'package:flutter/src/services/raw_keyboard.dart';
+
 import 'package:gamepads/gamepads.dart';
 import 'package:supermario_flutter/constants/animation_configs.dart';
 import 'package:supermario_flutter/constants/globals.dart';
@@ -46,15 +47,6 @@ class Mario extends SpriteAnimationGroupComponent<MarioAnimationState>
         levelBounds.topLeft + (size / 2); //diviso 2 per no nfare uscire mario
     _maxClamp = levelBounds.bottomRight - (size / 2);
     add(CircleHitbox());
-  }
-
-  @override
-  bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    print("CIAO");
-    _hAxisInput = 0;
-    _hAxisInput += keysPressed.contains(LogicalKeyboardKey.arrowLeft) ? -1 : 0;
-    _hAxisInput += keysPressed.contains(LogicalKeyboardKey.arrowRight) ? 1 : 0;
-    return super.onKeyEvent(event, keysPressed);
   }
 
   @override
@@ -109,13 +101,22 @@ class Mario extends SpriteAnimationGroupComponent<MarioAnimationState>
     //refresh schermo
     super.update(dt);
 
-    // if (dt > 0.05) {
-    //   return; //non faccio nulla
-    // }
-    speedUpdate();
-    facingDirection();
+    if (dt > 0.05) {
+      return; //non faccio nulla
+    }
+
     velocityUpdate();
     positionUpdate(dt);
+    speedUpdate();
+    facingDirection();
+  }
+
+  @override
+  bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    _hAxisInput = 0;
+    _hAxisInput += keysPressed.contains(LogicalKeyboardKey.arrowLeft) ? -1 : 0;
+    _hAxisInput += keysPressed.contains(LogicalKeyboardKey.arrowRight) ? 1 : 0;
+    return super.onKeyEvent(event, keysPressed);
   }
 
   //ogni dt la vel in y aum con gravity
