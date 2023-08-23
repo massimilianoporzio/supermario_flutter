@@ -2,19 +2,15 @@ import 'dart:async';
 
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame_tiled/flame_tiled.dart';
-
-import '../constants/globals.dart';
+import 'package:supermario_flutter/levels/level_component.dart';
+import 'package:supermario_flutter/levels/level_option.dart';
 
 class SuperMarioBrosGame extends FlameGame {
   late CameraComponent cameraComponent;
   final World world = World(); //contenitore di TUTTI gli oggetti
+  LevelComponent? _currentLevel;
   @override
   FutureOr<void> onLoad() async {
-    TiledComponent map = await TiledComponent.load(
-        Globals.lv_1_1, Vector2.all(Globals.tileSize));
-
-    world.add(map);
     cameraComponent = CameraComponent(world: world)
           ..viewfinder.visibleGameSize =
               Vector2(450, 50) //VEDO QUELLA PARTE DI MAPPA
@@ -25,6 +21,14 @@ class SuperMarioBrosGame extends FlameGame {
               500, 0) //posiz della TELECAMERA (50 px + in là dell'inizio)
         ;
     addAll([world, cameraComponent]); //agg il tutto al GAME
+    loadLevel(LevelOption.lv_1_1);
     return super.onLoad();
+  }
+
+  void loadLevel(LevelOption option) {
+    //tolgo dal game e rimetto
+    _currentLevel?.removeFromParent();
+    _currentLevel = LevelComponent(option: option);
+    add(_currentLevel!); //riaggiungo al game
   }
 }
