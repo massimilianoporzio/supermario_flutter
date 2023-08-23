@@ -24,13 +24,14 @@ class LevelComponent extends Component with HasGameRef<SuperMarioBrosGame> {
   @override
   FutureOr<void> onLoad() async {
     TiledComponent level = await TiledComponent.load(
-        Globals.lv_1_1, Vector2.all(Globals.tileSize));
+        option.pathName, Vector2.all(Globals.tileSize));
 
     gameRef.world.add(level);
     _levelBounds = Rectangle.fromPoints(
         Vector2(0, 0),
         Vector2(level.tileMap.map.width.toDouble(),
-            level.tileMap.map.height.toDouble()));
+                level.tileMap.map.height.toDouble()) *
+            Globals.tileSize);
     createPlatform(
         level.tileMap); //creo gli oggetti con cui posso avere collisioni
     createActors(level.tileMap);
