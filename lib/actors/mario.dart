@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/src/services/keyboard_key.g.dart';
 import 'package:flutter/src/services/raw_keyboard.dart';
 
@@ -26,13 +27,19 @@ class Mario extends SpriteAnimationGroupComponent<MarioAnimationState>
   late Vector2 _minClamp;
   late Vector2 _maxClamp;
 
+  final Vector2 _up = Vector2(0, -1); //def se sto saltando
+
   static const double _minMoveSpeed = 125; //125 px ogni dt
   static const double _maxMoveSpeed = _minMoveSpeed + 100; //al massimo 100 in +
   double _currentSpeed = _minMoveSpeed;
 
+  //stato di movimento
   bool isFacingRight = true;
+  bool isOnGround = false; //parte dall'alto cadendo
+
   //raccolgo gli input
   int _hAxisInput = 0;
+  bool _jumpInput = false; //all'inizio NON salta
 
   final _jumpSpeed = 400.0; //quanto può andare  veloce
 
@@ -109,6 +116,13 @@ class Mario extends SpriteAnimationGroupComponent<MarioAnimationState>
     positionUpdate(dt);
     speedUpdate();
     facingDirectionUpdate();
+    jumpUpdate();
+  }
+
+  void jumpUpdate() {
+    if (_jumpInput && isOnGround) {
+      jump();
+    }
   }
 
   @override
@@ -116,7 +130,20 @@ class Mario extends SpriteAnimationGroupComponent<MarioAnimationState>
     _hAxisInput = 0;
     _hAxisInput += keysPressed.contains(LogicalKeyboardKey.arrowLeft) ? -1 : 0;
     _hAxisInput += keysPressed.contains(LogicalKeyboardKey.arrowRight) ? 1 : 0;
+
+    //space bar for jumping
+    _jumpInput = keysPressed.contains(LogicalKeyboardKey.space);
+
     return super.onKeyEvent(event, keysPressed);
+  }
+
+  void jump() {
+    //cambio la velocity
+    velocity.y -= _jumpSpeed; //punta verso l'altro per questo sottraggo
+    isOnGround = false;
+
+    //play audio
+    FlameAudio.play(Globals.jumpSmallSFX);
   }
 
   //ogni dt la vel in y aum con gravity
@@ -152,6 +179,10 @@ class Mario extends SpriteAnimationGroupComponent<MarioAnimationState>
     final Vector2 collisionNormal = absoluteCenter - mid;
     double penetrationLength = (size.x / 2) - collisionNormal.length;
     collisionNormal.normalize(); //versore
+    //se prodotto del versore up con la normale alla collisione > 0.9
+    if (_up.dot(collisionNormal) > 0.9) {
+      isOnGround = true;
+    }
     position += collisionNormal.scaled(penetrationLength); //riscalato
   }
 }
