@@ -34,6 +34,7 @@ class Goomba extends SpriteAnimationComponent
   @override
   Future<void> onCollision(
       Set<Vector2> intersectionPoints, PositionComponent other) async {
+    super.onCollision(intersectionPoints, other);
     if (other is Mario) {
       if (!other.isOnGround) {
         other.jump(); //rimbalza!
