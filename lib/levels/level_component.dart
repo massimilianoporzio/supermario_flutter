@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame_tiled/flame_tiled.dart';
+import 'package:supermario_flutter/actors/goomba.dart';
 
 import 'package:supermario_flutter/games/super_mario_bros_game.dart';
 import 'package:supermario_flutter/levels/level_option.dart';
@@ -61,6 +62,10 @@ class LevelComponent extends Component with HasGameRef<SuperMarioBrosGame> {
           //la aggiungo al mondo tramite gameRef
           gameRef.world.add(_mario);
           break;
+        case 'Goomba':
+          Goomba goomba = Goomba(position: Vector2(obj.x, obj.y));
+          gameRef.world.add(
+              goomba); //sono TRE perché tre erano nella mappa con lo stesso nome
         default:
           break;
       }
