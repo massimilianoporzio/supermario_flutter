@@ -85,7 +85,7 @@ class Mario extends SpriteAnimationGroupComponent<MarioAnimationState>
     }
   }
 
-  void facingDirection() {
+  void facingDirectionUpdate() {
     if (_hAxisInput > 0) {
       isFacingRight = true;
     } else {
@@ -108,7 +108,7 @@ class Mario extends SpriteAnimationGroupComponent<MarioAnimationState>
     velocityUpdate();
     positionUpdate(dt);
     speedUpdate();
-    facingDirection();
+    facingDirectionUpdate();
   }
 
   @override
@@ -124,7 +124,7 @@ class Mario extends SpriteAnimationGroupComponent<MarioAnimationState>
     velocity.y += _gravity;
     velocity.y = velocity.y.clamp(-_jumpSpeed, 150); //ma se è troppa la clampo
 
-    velocity.x += _hAxisInput * _currentSpeed;
+    velocity.x = _hAxisInput * _currentSpeed;
   }
 
   void positionUpdate(double dt) {

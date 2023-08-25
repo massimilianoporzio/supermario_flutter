@@ -35,7 +35,14 @@ class LevelComponent extends Component with HasGameRef<SuperMarioBrosGame> {
     createPlatform(
         level.tileMap); //creo gli oggetti con cui posso avere collisioni
     createActors(level.tileMap);
+    _setupCamera();
     return super.onLoad();
+  }
+
+  void _setupCamera() {
+    gameRef.cameraComponent.follow(_mario, maxSpeed: 1000);
+    gameRef.cameraComponent.setBounds(
+        Rectangle.fromPoints(_levelBounds.topRight, _levelBounds.topLeft));
   }
 
   void createActors(RenderableTiledMap tiledMap) {
