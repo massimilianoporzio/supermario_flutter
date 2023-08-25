@@ -76,8 +76,15 @@ class Mario extends SpriteAnimationGroupComponent<MarioAnimationState>
     // final gamepads = await Gamepads.list();
     // print('Gamepads' + gamepads.toString());
     final SpriteAnimation idle = await AnimationConfigs.mario.idle();
+    final SpriteAnimation walking = await AnimationConfigs.mario.walking();
+    final SpriteAnimation jumping = await AnimationConfigs.mario.jumping();
+
     //setter per la map  di animazioni
-    animations = {MarioAnimationState.idle: idle};
+    animations = {
+      MarioAnimationState.idle: idle,
+      MarioAnimationState.walking: walking,
+      MarioAnimationState.jumping: jumping,
+    };
     current = MarioAnimationState
         .idle; //lo stato attuale è idle a cui corrisp l'animazione definta sopra
   }
@@ -117,6 +124,7 @@ class Mario extends SpriteAnimationGroupComponent<MarioAnimationState>
     speedUpdate();
     facingDirectionUpdate();
     jumpUpdate();
+    marioAnimationUpdate();
   }
 
   void jumpUpdate() {
@@ -144,6 +152,16 @@ class Mario extends SpriteAnimationGroupComponent<MarioAnimationState>
 
     //play audio
     FlameAudio.play(Globals.jumpSmallSFX);
+  }
+
+  void marioAnimationUpdate() {
+    if (!isOnGround) {
+      current = MarioAnimationState.jumping;
+    } else if (_hAxisInput < 0 || _hAxisInput > 0) {
+      current = MarioAnimationState.walking;
+    } else if (_hAxisInput == 0) {
+      current = MarioAnimationState.idle;
+    }
   }
 
   //ogni dt la vel in y aum con gravity
