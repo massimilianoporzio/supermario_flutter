@@ -59,19 +59,32 @@ class Mario extends SpriteAnimationGroupComponent<MarioAnimationState>
   @override
   FutureOr<void> onLoad() async {
     await super.onLoad();
-    // Gamepads.events.listen((GamepadEvent event) {
-    //   //print("gamepadId" + event.gamepadId);
-    //   // print("timestamp" + event.timestamp.toString());
-    //   _hAxisInput = 0;
-    //   if (event.type == KeyType.analog) {
-    //     if (event.key == "dwXpos") {
-    //       _hAxisInput += event.value > 32767.0 ? 1 : 0;
-    //     }
-    //     if (event.key == "dwXpos") {
-    //       _hAxisInput += event.value < 32767.0 ? -1 : 0;
-    //     }
-    //   }
-    // });
+    Gamepads.events.listen((GamepadEvent event) {
+      // print(event.type);
+      // print(event.key);
+      //print("gamepadId" + event.gamepadId);
+      // print("timestamp" + event.timestamp.toString());
+
+      if (event.type == KeyType.analog) {
+        _hAxisInput = 0;
+        if (event.key == "dwXpos") {
+          int increment = 0;
+          if (event.value > 32767.0) {
+            increment = 1;
+          } else if (event.value < 32767.0) {
+            increment = -1;
+          } else {
+            increment = 0;
+          }
+          _hAxisInput += increment;
+        }
+      }
+      if (event.type == KeyType.button) {
+        if (event.key == "button-0") {
+          _jumpInput = event.value == 1.0;
+        }
+      }
+    });
 
     // final gamepads = await Gamepads.list();
     // print('Gamepads' + gamepads.toString());
